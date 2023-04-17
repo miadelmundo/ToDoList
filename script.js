@@ -6,7 +6,7 @@ var getTasks = function () {
     success: function (response, textStatus) {
       $('#todo-wrap').empty();
       response.tasks.forEach(function(task){
-        $('#todo-wrap').append('<div>' + task.content + '</div>');
+        $('#todo-wrap').append('<div class="todo-item"><input type="checkbox"><span>' + task.content + '</span><button class="delete-task" data-id="' + task.id + '">X</button></div>');
       });    
     },
     error: function (request, textStatus, errorMessage) {
@@ -14,6 +14,8 @@ var getTasks = function () {
     }
   });
 }
+
+getTasks();
 
 var addTask = function() {
   $.ajax({
@@ -39,7 +41,22 @@ var addTask = function() {
 $('#add-task').on('submit', function (e) {
   e.preventDefault();
   addTask();
-  
 });
 
-getTasks();
+var deleteTask = function (id) {
+  $.ajax({
+    type: 'DELETE',
+    url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '?api_key=153',
+    success: function (response, textStatus) {
+      getTasks();
+    },
+    error: function (request, textStatus, errorMessage) {
+      console.log(errorMessage);
+    }
+  });
+}
+
+
+$(document).on('click', '.delete-task', function () {
+  deleteTask($(this).data('id'))
+});
