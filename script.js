@@ -6,7 +6,7 @@ var getTasks = function () {
     success: function (response, textStatus) {
       $('#todo-wrap').empty();
       response.tasks.forEach(function(task){
-        $('#todo-wrap').append('<div class="todo-item"><input type="checkbox"><span>' + task.content + '</span><button class="delete-task" data-id="' + task.id + '">X</button></div>');
+        $('#todo-wrap').append('<div class="todo-item"><input type="checkbox" class="mark-task" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '><span>' + task.content + '</span><button class="delete-task" data-id="' + task.id + '">X</button></div>');
       });    
     },
     error: function (request, textStatus, errorMessage) {
@@ -59,4 +59,25 @@ var deleteTask = function (id) {
 
 $(document).on('click', '.delete-task', function () {
   deleteTask($(this).data('id'))
+});
+
+var markTaskComplete = function (id) {
+  $.ajax({
+    type: 'PUT',
+     url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '/mark_complete?api_key=153',
+     dataType: 'json',
+     success: function (response, textStatus) {
+       getTasks();
+     },
+     error: function (request, textStatus, errorMessage) {
+       console.log(errorMessage);
+     }
+   });
+}
+
+
+$(document).on('change', '.mark-task', function () {
+  if (this.checked){
+    markTaskComplete($(this).data('id'));
+  }
 });
