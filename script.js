@@ -75,9 +75,51 @@ var markTaskComplete = function (id) {
    });
 }
 
+var markTaskActive = function (id) {
+  $.ajax({
+    type: 'PUT',
+      url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '/mark_active?api_key=153',
+      dataType: 'json',
+      success: function (response, textStatus) {
+        getTasks();
+      },
+      error: function (request, textStatus, errorMessage) {
+        console.log(errorMessage);
+      }
+  });
+}
 
 $(document).on('change', '.mark-task', function () {
   if (this.checked){
     markTaskComplete($(this).data('id'));
+  } else {
+    markTaskActive($(this).data('id'));
   }
 });
+
+/* show only active */ 
+$('#filter-active').on('click', function () {
+  $('.todo-item').each(function (i, ele) {
+    if ($(this).find('.mark-task').prop('checked') == false ) {
+      $(this).show();
+    } else {
+      $(this).hide();
+    }
+  })
+})
+
+/* show only checked */ 
+$('#filter-completed').on('click', function () {
+  $('.todo-item').each(function (i, ele) {
+    if ($(this).find('.mark-task').prop('checked') == true ) {
+      $(this).show();
+    } else {
+      $(this).hide();
+    }
+  })
+})
+
+
+$('#filter-all').on('click', function () {
+  getTasks();
+})
