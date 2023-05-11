@@ -1,8 +1,19 @@
 .todo-item {
   display: flex;
+  margin-bottom: 10px;
 }
 
 .todo-item span {
  margin-right: auto;
  margin-left: 1rem;
+}
+
+.delete-task {
+  border: 0; 
+  color: gray;
+}
+
+#foot-wrap button {
+  border-color:  gray;
+  margin-left: 10px;
 }
